@@ -2,9 +2,6 @@ import confluent_kafka
 import json
 import time
 import logging
-import random
-
-from testdata import TestData
 
 
 logger = logging.getLogger(__name__)
@@ -15,9 +12,18 @@ class KafkaProducer(confluent_kafka.Producer):
         super().__init__(*args, **kwargs)
         logger.info('Kafka Producer has been initiated...')
 
+    def create_topic(self, *args, **kwargs):
+
+
+        admin_client = confluent_kafka.admin.AdminClient(*args, **kwargs)
+
+        topic_list = []
+        topic_list.append(confluent_kafka.admin.NewTopic("chat-message", 1, 1))
+        admin_client.create_topics(topic_list)
+
     def receipt(self, err, msg):
         if err is not None:
-            logger.info('Error: {}'.format(err))
+            logger.warn(f'Kafka Producer Error: {err}')
         else:
             message = f'Produced message on topic {msg.topic()} with value of {msg.value()}\n'
             logger.info(message)

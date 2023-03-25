@@ -8,5 +8,6 @@ logging.quick_config(
         "datatypes": logging.WARNING,
         "controllers": logging.INFO,
         "producer": logging.INFO,
+        "elastic": logging.INFO,
     }
 )

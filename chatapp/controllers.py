@@ -9,7 +9,8 @@ import producer
 
 logger = logging.getLogger(__name__)
 
-kafka_producer = producer.KafkaProducer({'bootstrap.servers':'localhost:9092'})
+
+kafka_producer = producer.KafkaProducer({'bootstrap.servers':'localhost:29092'})
 logger.info('Kafka Producer has been initiated...')
 
 # from endpoints.decorators.auth import AuthDecorator
@@ -34,10 +35,11 @@ class Default(Controller):
 class Message(Controller):
     # @auth()
     def GET(self, **kwargs):
+        # TODO - get messages from elasticsearch
         return "Message GET endpoint hit"
 
     # @auth()
     def POST(self, **kwargs):
-        kafka_producer.send_message('test', kwargs['body'])
-        logger.info('Sent Kafka message: {}'.format(kwargs['body']))
-        return 'Sent Kafka message: {}'.format(kwargs['body'])
+        kafka_producer.send_message('chat-message', kwargs['body'])
+        logger.info(f'Sent Kafka message: {kwargs["body"]}')
+        return f'Sent Kafka message: {kwargs["body"]}'

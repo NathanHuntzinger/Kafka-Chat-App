@@ -8,48 +8,45 @@ logger = logging.getLogger(__name__)
 
 class Elastic(elasticsearch.Elasticsearch):
     def __init__(self, *args, **kwargs):
-        self.host = kwargs.get('host', 'localhost')
-        self.port = kwargs.get('port', 9200)
-        config = {
-            'host': self.host,
-            'port': self.port
-        }
+        super().__init__(*args, **kwargs)
 
-        super().__init__([config])
+        self.check_connection()
+        self.index_name = "new-chat-message"
 
-        self.es = None
-        self.connect()
-        self.INDEX_NAME = "new-relic-log"
+    def check_connection(self):
+        """Check connection to ElasticSearch"""
+        connected = self.ping()
 
-    def connect(self):
-        self.es = elasticsearch.Elasticsearch([{'host': self.host, 'port': self.port}])
-        if self.es.ping():
-            print("ES connected successfully")
+        if connected:
+            logger.info("Successfully connected to ElasticSearch")
+            print("Successfully connected to ElasticSearch")
         else:
-            print("Not connected")
+            logger.warn("Failed to connect to ElasticSearch")
+
+        return connected
 
     def create_index(self):
-        if self.es.indices.exists(self.INDEX_NAME):
-            print("deleting '%s' index..." % (self.INDEX_NAME))
-            res = self.es.indices.delete(index=self.INDEX_NAME)
-            print(" response: '%s'" % (res))
+        if self.indices.exists(self.index_name):
+            logger.info(f"deleting '{self.index_name}' index...")
+            res = self.indices.delete(index=self.index_name)
+            logger.info(f" response: '{res}'")
             request_body = {
                 "settings": {
                     "number_of_shards": 1,
                     "number_of_replicas": 0
                 }
             }
-            print("creating '%s' index..." % (self.INDEX_NAME))
-            res = self.es.indices.create(index=self.INDEX_NAME, body=request_body, ignore=400)
-            print(" response: '%s'" % (res))
+            logger.info(f"creating '{self.index_name}' index...")
+            res = self.indices.create(index=self.index_name, body=request_body, ignore=400)
+            logger.info(f" response: '{res}'")
 
     def push_to_index(self, message):
         try:
-            response = self.es.index(
-                index=self.INDEX_NAME,
-                doc_type="log",
+            print(f"Pushing message to ElasticSearch: {message}\n")
+            response = self.index(
+                index=self.index_name,
                 body=message
             )
-            print("Write response is :: {}\n\n".format(response))
+            logger.warn(f"ElasticSearch response: {response}\n\n")
         except Exception as e:
-            print("Exception is :: {}".format(str(e)))
+            logger.warn(f"ElasticSearch Error: {e}")
