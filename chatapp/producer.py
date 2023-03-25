@@ -1,4 +1,4 @@
-from confluent_kafka import Producer
+import confluent_kafka
 import json
 import time
 import logging
@@ -7,47 +7,28 @@ import random
 from testdata import TestData
 
 
-logging.basicConfig(format='%(asctime)s %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S',
-                    filename='producer.log',
-                    filemode='w')
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-p = Producer({'bootstrap.servers':'localhost:9092'})
-print('Kafka Producer has been initiated...')
+class KafkaProducer(confluent_kafka.Producer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        logger.info('Kafka Producer has been initiated...')
 
+    def receipt(self, err, msg):
+        if err is not None:
+            logger.info('Error: {}'.format(err))
+        else:
+            message = f'Produced message on topic {msg.topic()} with value of {msg.value()}\n'
+            logger.info(message)
 
-def receipt(err, msg):
-    if err is not None:
-        print('Error: {}'.format(err))
-    else:
-        message = f'Produced message on topic {msg.topic()} with value of {msg.value()}\n'
-        logger.info(message)
-        print(message)
-
-
-def main():
-    testdata = TestData()
-
-    topic = 'user-tracker'
-
-    for _ in range(100):
+    def send_message(self, topic, message):
         data = {
-           'user_id': testdata.get_hash(),
-           'user_name':testdata.get_name(),
-           'user_email': testdata.get_email(),
-           'platform': random.choice(['Mobile', 'Laptop', 'Tablet']),
-           'signup_at': str(testdata.get_past_datetime()),
+            'message': message,
+            'timestamp': time.time()
         }
-        m = json.dumps(data)
-        p.poll(1)
-        p.produce(topic, m, callback=receipt)
-        p.flush()
-        # time.sleep(random.random())
-
-
-if __name__ == '__main__':
-    main()
+        kafka_message = json.dumps(data)
+        logger.info('Sending Kafka message: {}'.format(kafka_message))
+        self.poll(1)
+        self.produce(topic, kafka_message, callback=self.receipt)
+        self.flush()

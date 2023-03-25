@@ -1,3 +1,4 @@
+wheel
 confluent-kafka
 elasticsearch
 
