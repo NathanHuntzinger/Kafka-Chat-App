@@ -34,6 +34,13 @@ way to do it.
     ```bash
     pip install -r requirements.txt
     ```
+5. Setup frontend
+
+    ```
+    cd frontend/chat-app
+    yarn
+    yarn dev
+    ```
 
 ## Tools
 
@@ -48,3 +55,4 @@ way to do it.
 - [Endpoints](https://github.com/Jaymon/testdata)
 
 - [DataTypes](https://github.com/jaymon/datatypes)
+
