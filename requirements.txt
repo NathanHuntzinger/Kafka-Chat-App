@@ -2,3 +2,4 @@ confluent-kafka
 
 git+https://github.com/Jaymon/testdata#egg=testdata
 git+https://github.com/jaymon/datatypes#egg=datatypes
+git+https://github.com/jaymon/endpoints#egg=endpoints

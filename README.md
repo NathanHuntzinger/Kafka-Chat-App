@@ -17,7 +17,9 @@ way to do it.
     docker-compose up -d
     ```
 
-3. Setup ElasticSearch
+    This will start Kafka and an Elasticsearch node.
+
+3. Finish ElasticSearch setup
 
     Follow the instructions [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html),
     starting at step 3. You will probably have to reset the password for the elastic user because of
