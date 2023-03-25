@@ -19,7 +19,14 @@ way to do it.
 
     This will start Kafka and an Elasticsearch node.
 
-3. Finish ElasticSearch setup
+3. Setup Kafka topics
+
+    ```bash
+    docker-compose exec kafka kafka-topics --create --bootstrap-server \
+    localhost:9092 --replication-factor 1 --partitions 1 --topic chat-message
+    ```
+
+4. Finish ElasticSearch setup
 
     Follow the instructions [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html),
     starting at step 3. You will probably have to reset the password for the elastic user because of
@@ -29,14 +36,15 @@ way to do it.
     docker exec -it es01 /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
     ```
 
-4. Install Python dependencies (preferably in a virtual environment)
+5. Install Python dependencies (preferably in a virtual environment)
 
     ```bash
     pip install -r requirements.txt
     ```
-5. Setup frontend
 
-    ```
+6. Setup frontend
+
+    ```bash
     cd frontend/chat-app
     yarn
     yarn dev
@@ -50,9 +58,14 @@ way to do it.
 
 - Elasticsearch
 
+- Kibana
+
 - [Docker](https://www.docker.com/products/docker-desktop/)
 
 - [Endpoints](https://github.com/Jaymon/testdata)
 
 - [DataTypes](https://github.com/jaymon/datatypes)
 
+- React
+
+- Firebase

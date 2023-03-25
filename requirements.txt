@@ -1,4 +1,6 @@
+wheel
 confluent-kafka
+elasticsearch
 
 git+https://github.com/Jaymon/testdata#egg=testdata
 git+https://github.com/jaymon/datatypes#egg=datatypes
