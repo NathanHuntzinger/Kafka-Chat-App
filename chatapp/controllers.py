@@ -40,4 +40,4 @@ class Message(Controller):
     def POST(self, **kwargs):
         kafka_producer.send_message('test', kwargs['body'])
         logger.info('Sent Kafka message: {}'.format(kwargs['body']))
-        return 'hello {}'.format(kwargs['body'])
+        return 'Sent Kafka message: {}'.format(kwargs['body'])
