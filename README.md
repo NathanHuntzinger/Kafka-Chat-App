@@ -1,15 +1,16 @@
 # Chat Application
 
-This is a project for the HackUSU 2023 Hackathon. My goal for this project is to create an
-implementation for Kafka and Elasticsearch. I probably wouldn't do this in a real project designed
-for such a small scale, but I wanted to learn more about these tools and this seemed like a good
+This is a project for the HackUSU 2023 Hackathon. Our goal for this project is to create an
+implementation for Kafka and Elasticsearch. We probably wouldn't do this in a real chat  app designed
+for such a small scale, but we wanted to learn more about these tools and this seemed like a good
 way to do it.
 
 ## Setup
 
 1. Download and install [Docker](https://www.docker.com/products/docker-desktop/)
 
-    Kafka and Elasticsearch can both run in Docker containers. This is an easy way to get them up and running.
+    Kafka, Elasticsearch, and Kibana can all run in Docker containers. This is an easy way to get
+    them up and running.
 
 2. Start the containers
 
@@ -30,10 +31,10 @@ way to do it.
 
     Follow the instructions [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html),
     starting at step 3. You will probably have to reset the password for the elastic user because of
-    how it starts in docker-compose.
+    how it starts in docker-compose:
 
     ```bash
-    docker exec -it es01 /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
+    docker exec -it elasticsearch /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
     ```
 
 5. Install Python dependencies (preferably in a virtual environment)
@@ -47,6 +48,23 @@ way to do it.
     ```bash
     cd frontend/chat-app
     yarn
+    ```
+
+7. Start the backend server by running the following command inside the `chatapp` sub-directory
+
+    ```bash
+    endpoints --prefix=controllers
+    ```
+
+8. Start the consumer by running the following command inside the `chatapp` sub-directory
+
+    ```bash
+    python consumer.py
+    ```
+
+9. Start the frontend by running the following command inside the `frontend/chat-app` sub-directory
+
+    ```bash
     yarn dev
     ```
 

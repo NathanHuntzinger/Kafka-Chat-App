@@ -12,15 +12,6 @@ class KafkaProducer(confluent_kafka.Producer):
         super().__init__(*args, **kwargs)
         logger.info('Kafka Producer has been initiated...')
 
-    def create_topic(self, *args, **kwargs):
-
-
-        admin_client = confluent_kafka.admin.AdminClient(*args, **kwargs)
-
-        topic_list = []
-        topic_list.append(confluent_kafka.admin.NewTopic("chat-message", 1, 1))
-        admin_client.create_topics(topic_list)
-
     def receipt(self, err, msg):
         if err is not None:
             logger.warn(f'Kafka Producer Error: {err}')

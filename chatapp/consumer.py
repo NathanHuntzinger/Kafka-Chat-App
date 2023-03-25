@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import confluent_kafka
-import elasticsearch
 
 from datatypes import logging
 
@@ -31,7 +30,6 @@ class KafkaConsumer(confluent_kafka.Consumer):
         except Exception as e:
             logger.error(f'Kafka Consumer Error: {e}')
             return
-
 
 
 def main():
